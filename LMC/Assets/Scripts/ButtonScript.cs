@@ -13,17 +13,22 @@ public class ButtonScript : MonoBehaviour {
 	
 	}
 
-
-	public void GoToGame () {
+	public void GoToMenu () {
 		Application.LoadLevel(0);
 	}
-	public void GoToOptions () {
-		Application.LoadLevel(1);
+	public void GoToGame () {
+		Application.LoadLevel (1);
 	}
 	public void GoToLoad () {
 		Application.LoadLevel(2);
 	}
-	public void GoToMenu () {
+	public void GoToOptions () {
 		Application.LoadLevel(3);
 	}
+	public void GoToExit () {
+		Application.Quit();
+	}
+
+
+
 }

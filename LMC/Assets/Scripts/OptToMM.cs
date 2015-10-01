@@ -13,7 +13,8 @@ public class OptToMM : MonoBehaviour {
 	
 	}
 
+
 	public void GoToGame () {
-		Application.LoadLevel(0);
+		Application.LoadLevel(1);
 	}
 }
