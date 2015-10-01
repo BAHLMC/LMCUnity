@@ -13,8 +13,17 @@ public class ButtonScript : MonoBehaviour {
 	
 	}
 
-    void OnGUI()
-    {
-        GUI.Button(new Rect(200, 150, 100, 50), "Main Menu");
-    }
+
+	public void GoToGame () {
+		Application.LoadLevel(0);
+	}
+	public void GoToOptions () {
+		Application.LoadLevel(1);
+	}
+	public void GoToLoad () {
+		Application.LoadLevel(2);
+	}
+	public void GoToMenu () {
+		Application.LoadLevel(3);
+	}
 }
