@@ -52,16 +52,24 @@ public class LMCScript : MonoBehaviour {
     void doNextStep()
     {
         int code = currentCode.code();
-        if (code == 902)
-        {
-            sendToOutput();
-        } else if (code == 901)
-        {
-            getInput();
-        } else if (code >= 600)
-        {
-            checkForBranch(code);
-        }
+        
+		if (code == 902) {
+			sendToOutput ();
+		} else if (code == 901) {
+			getInput ();
+		} else if (code >= 600) {
+			checkForBranch (code);
+		} else if (code >= 500) {
+			loadOp (code);
+		} else if (code >= 300) {
+			storeOp(code);
+		} else if (code >= 200) {
+			subOp (code);
+		} else if (code >= 100) {
+			addOp (code);
+		} else if (code == 000) {
+			//halt
+		}
 
         currentCode = currentCode.next();
     }
@@ -97,6 +105,25 @@ public class LMCScript : MonoBehaviour {
         isRunning = false;
         doNextStep();
     }
+
+
+	private int getAccumulator()
+	{
+		return Int32.Parse(accumulator.text);
+	}
+
+	private int getRegister(int reg) {
+		//get value stored in register reg
+	}
+
+	private int setRegister(int reg, int value) {
+		//set value stored in register reg to value
+	}
+	
+	private void setAccumulator(int newValue)
+	{
+		accumulator.text = newValue + "";
+	}
 
     private void sendToOutput()
     {
@@ -151,16 +178,36 @@ public class LMCScript : MonoBehaviour {
     {
         //Go to the operation 1 more than the branch code that is passed in
     }
+	
 
-    private int getAccumulator()
-    {
-        return Int32.Parse(accumulator.text);
-    }
+	private void loadOp( int code) {
+		int register = code % 100;
+		int Avalue = getAccumulator ();
+		setRegister (register, Avalue);
+	}
 
-    private void setAccumulator(int newValue)
-    {
-        accumulator.text = newValue + "";
-    }
+	private void storeOp( int code) {
+		int register = code % 100;
+		int Rvalue = getRegister (register);
+		setAccumulator (Rvalue);
+	}
+
+	private void addOp( int code) {
+		int register = code % 100;
+		int Avalue = getAccumulator();
+		int Rvalue = getRegister (register);
+		setAccumulator (Rvalue + Avalue);
+	}
+
+	private void subOp( int code) {
+		int register = code % 100;
+		int Avalue = getAccumulator();
+		int Rvalue = getRegister ();
+		setAccumulator (Avalue - RValue);
+		//set neg flags
+	}
+	
+
 
     private class Node
     {
