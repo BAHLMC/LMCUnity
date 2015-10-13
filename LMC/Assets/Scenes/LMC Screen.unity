@@ -437,7 +437,7 @@ MonoBehaviour:
   m_LineType: 0
   m_HideMobileInput: 0
   m_CharacterValidation: 1
-  m_CharacterLimit: 3
+  m_CharacterLimit: 4
   m_EndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -449,7 +449,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.InputField+OnChangeEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_SelectionColor: {r: .65882355, g: .807843149, b: 1, a: .752941191}
-  m_Text: 
+  m_Text: 100
   m_CaretBlinkRate: .850000024
 --- !u!114 &200144472
 MonoBehaviour:
@@ -1024,7 +1024,7 @@ MonoBehaviour:
   parsedTextBox: {fileID: 304093823}
   scriptInput: {fileID: 964543514}
   outputField: {fileID: 1275494822}
-  accumulator: {fileID: 59029889}
+  accumulator: {fileID: 200144471}
   inputTextField: {fileID: 984620166}
 --- !u!1 &373451052
 GameObject:
@@ -3612,7 +3612,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: a677c8888c5b9e04c9f1592a10a36f44, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1

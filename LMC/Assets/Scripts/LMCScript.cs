@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 
 public class LMCScript : MonoBehaviour {
@@ -13,13 +12,17 @@ public class LMCScript : MonoBehaviour {
     private bool inEditMode;
 
     //Variables needed for parsing and running the op codes
-    private Node currentCode;
+    private int currentCode;
+    private string[] opCodes;
+
+    //Variables used for the registers
+    private int[] registers;
 
     //Interactive variables set in Unity
     public Text parsedTextBox;
     public InputField scriptInput;
     public InputField outputField;
-    public Text accumulator;
+    public InputField accumulator;
     public InputField inputTextField;
 
     /*
@@ -34,8 +37,19 @@ public class LMCScript : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        parsedTextBox = GetComponent<Text>();
-        scriptInput = GetComponent<InputField>();
+
+        isRunning = false;
+        inEditMode = false;
+
+        registers = new int[100];
+
+        //Test
+        parsedTextBox.text = "The parsed text from the script will go here";
+
+        scriptInput.text = "INP\nSTA FIRST\nINP\nSTA SECOND\nINP\nADD FIRST\nADD SECOND\nSUB FIRST\nOUT\nHLT\nFIRST DAT\nSECOND DAT";
+
+        opCodes = new string[0];
+        currentCode = -1;
     }
 
     // Update is called once per frame
@@ -45,13 +59,18 @@ public class LMCScript : MonoBehaviour {
 
     void fixedUpdate()
     {
-        if (isRunning)
-            doNextStep();
+
     }
 
     void doNextStep()
     {
-        int code = currentCode.code();
+        if (currentCode > opCodes.Length || currentCode < 0)
+        {
+            isRunning = false;
+            return;
+        }
+
+        int code = Int32.Parse(opCodes[currentCode]);
         
 		if (code == 902) {
 			sendToOutput ();
@@ -68,10 +87,14 @@ public class LMCScript : MonoBehaviour {
 		} else if (code >= 100) {
 			addOp (code);
 		} else if (code == 000) {
-			//halt
+            //halt
+            isRunning = false;
+            return;
 		}
 
-        currentCode = currentCode.next();
+        currentCode++;
+        if (isRunning)
+            doNextStep();
     }
 
     public void onEditClicked()
@@ -82,17 +105,32 @@ public class LMCScript : MonoBehaviour {
     public void onSaveClicked()
     {
         inEditMode = false;
-        // updateParsedText;
+        String curText = scriptInput.text;
+        string[] input = curText.Split('\n');
+        string[] result = LoadScript.callStartScanTest(input);
+        String newParse = "";
+        for (int i = 0; i < result.Length; i++)
+        {
+            newParse += result[i] + "\n";
+        }
+        parsedTextBox.text = newParse;
+
+        opCodes = result;
+        currentCode = 0;
+
     }
 
     public void onPlayPauseClicked()
     {
         isRunning = !isRunning;
+        if (isRunning)
+            doNextStep();
     }
 
     public void onRunClicked()
     {
         isRunning = true;
+        doNextStep();
     }
 
     public void onResetClicked()
@@ -113,11 +151,20 @@ public class LMCScript : MonoBehaviour {
 	}
 
 	private int getRegister(int reg) {
-		//get value stored in register reg
+        //get value stored in register reg
+        if (reg >= 100)
+            return -1; //Might need a better fail value, but for now this might work.
+
+        return registers[reg];
 	}
 
 	private int setRegister(int reg, int value) {
-		//set value stored in register reg to value
+        //set value stored in register reg to value
+        if (reg >= 100)
+            return -1;
+
+        registers[reg] = value;
+        return 1;
 	}
 	
 	private void setAccumulator(int newValue)
@@ -127,14 +174,15 @@ public class LMCScript : MonoBehaviour {
 
     private void sendToOutput()
     {
-        //Get value from accumulator
-        //send value to output
+        outputField.text = getAccumulator() +"";
     }
 
     private void getInput()
     {
         //Change color of input field and wait for input
-
+        String input = inputTextField.text;
+        input = "5";
+        setAccumulator(Int32.Parse(input));
     }
 
     private void checkForBranch(int code)
@@ -202,28 +250,9 @@ public class LMCScript : MonoBehaviour {
 	private void subOp( int code) {
 		int register = code % 100;
 		int Avalue = getAccumulator();
-		int Rvalue = getRegister ();
-		setAccumulator (Avalue - RValue);
+		int Rvalue = getRegister (register);
+		setAccumulator (Avalue - Rvalue);
 		//set neg flags
 	}
-	
-
-
-    private class Node
-    {
-        int opCode;
-        Node prevNode;
-        Node nextNode;
-
-        public int code ()
-        {
-            return opCode;
-        }
-
-        public Node next()
-        {
-            return nextNode;
-        }
-    }
 
 }

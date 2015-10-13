@@ -5,26 +5,34 @@ using System.Collections.Generic;
 public class LoadScript : MonoBehaviour
 {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
-	}
+    /*
+    
+        //This is the fake iput for dummy testing
+        INP\nSTA FIRST\nINP\nSTA SECOND\nINP\nADD FIRST\nADD SECOND\nSUB FIRST\nOUT\nHLT\nFIRST DAT\nSECOND DAT
+        
+        INP
+        STA FIRST
+        INP
+        STA SECOND
+        INP
+        ADD FIRST
+        ADD SECOND
+        SUB FIRST
+        OUT
+        HLT 
+        FIRST DAT 
+        SECOND DAT
 
-	public void GoToMainMenu ()
+        */
+
+    public void GoToMainMenu ()
 	{
 		Application.LoadLevel (3);
 	}
 
-	public void callStartScanTest ()
+	public static string[] callStartScanTest (string[] toTest)
 	{
-		string[] toTest = new string[12] {
+		string[] toTest1 = new string[12] {
 			"INP","STA FIRST","INP","STA SECOND","INP",
 			"ADD FIRST","ADD SECOND","SUB FIRST","OUT","HLT","FIRST DAT","SECOND DAT"
 		};
@@ -32,9 +40,10 @@ public class LoadScript : MonoBehaviour
 		for (int i = 0; i < ret.Length; i++) {
 			Debug.Log (ret [i]);
 		}
+        return ret;
 	}
 
-	string convertRegToString (int reg)
+	static string convertRegToString (int reg)
 	{
 		if (reg < 10) {
 			return "0" + reg.ToString ();
@@ -43,7 +52,7 @@ public class LoadScript : MonoBehaviour
 		}
 	}
 
-	string[] StartScan (string[] al)
+	static string[] StartScan (string[] al)
 	{
 		var dats = new Dictionary<string,int> ();
 		for (int i = 0; i <al.Length; i++) {
