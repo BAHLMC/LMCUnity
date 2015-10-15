@@ -14,6 +14,7 @@ public class LMCScript : MonoBehaviour {
     //Variables needed for parsing and running the op codes
     private int currentCode;
     private string[] opCodes;
+    private bool isNegative;
 
     //Variables used for the registers
     private int[] registers;
@@ -42,6 +43,7 @@ public class LMCScript : MonoBehaviour {
         inEditMode = false;
 
         registers = new int[100];
+        clearAll();
 
         //Test
         parsedTextBox.text = "The parsed text from the script will go here";
@@ -57,9 +59,11 @@ public class LMCScript : MonoBehaviour {
         scriptInput.enabled = inEditMode;
 	}
 
-    void fixedUpdate()
+    void clearAll()
     {
-
+        outputField.text = "";
+        accumulator.text = "";
+        inputTextField.text = "";
     }
 
     void doNextStep()
@@ -135,7 +139,9 @@ public class LMCScript : MonoBehaviour {
 
     public void onResetClicked()
     {
+        clearAll();
         isRunning = false;
+        currentCode = 0;
     }
 
     public void onStepClicked()
@@ -181,7 +187,8 @@ public class LMCScript : MonoBehaviour {
     {
         //Change color of input field and wait for input
         String input = inputTextField.text;
-        input = "5";
+        if (input.Length == 0)
+            input = "5";
         setAccumulator(Int32.Parse(input));
     }
 
