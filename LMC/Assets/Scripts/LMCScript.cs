@@ -72,13 +72,16 @@ public class LMCScript : MonoBehaviour {
         float regWidth = registerPanel.GetComponent<RectTransform>().rect.width / 10;
         float regHeight = registerPanel.GetComponent<RectTransform>().rect.height / 10;
 
+        registerPanel.GetComponent<GridLayoutGroup>().cellSize = new Vector2(regWidth, regHeight);
+
         for (int dx = 0; dx < 10; ++dx){
             for (int dy = 0; dy < 10; ++dy)
             {
                GameObject reg = Instantiate(registerPrefab) as GameObject;
                 //reg.transform.parent = registerPanel.transform;
                 reg.transform.SetParent(registerPanel.transform, false);
-                reg.transform.localPosition = new Vector3(regWidth*dy - registerPanel.GetComponent<RectTransform>().rect.height/2, -regHeight*dx + registerPanel.GetComponent<RectTransform>().rect.width/2 - regHeight, 0);
+                //not necessary after adding an automatic layout component
+                //reg.transform.localPosition = new Vector3(regWidth*dy - registerPanel.GetComponent<RectTransform>().rect.height/2, -regHeight*dx + registerPanel.GetComponent<RectTransform>().rect.width/2 - regHeight, 0);
                 pRegisters[10 * dx + dy] = reg;
                 reg.transform.GetChild(0).GetComponent<Text>().text = 10 * dx + dy + "";
 
@@ -96,8 +99,12 @@ public class LMCScript : MonoBehaviour {
             else
                 pRegisters[x].transform.GetChild(1).GetComponent<Text>().text = "000";
         }
-        
-        
+
+        float regWidth = registerPanel.GetComponent<RectTransform>().rect.width / 10;
+        float regHeight = registerPanel.GetComponent<RectTransform>().rect.height / 10;
+
+        registerPanel.GetComponent<GridLayoutGroup>().cellSize = new Vector2(regWidth, regHeight);
+
     }
 
     void clearAll()
