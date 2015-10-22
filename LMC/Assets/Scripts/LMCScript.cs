@@ -18,6 +18,7 @@ public class LMCScript : MonoBehaviour {
 
     //Variables used for the registers
     private int[] registers;
+    private GameObject[] pRegisters;
 
     //Interactive variables set in Unity
     public Text parsedTextBox;
@@ -25,6 +26,8 @@ public class LMCScript : MonoBehaviour {
     public InputField outputField;
     public InputField accumulator;
     public InputField inputTextField;
+    public GameObject registerPanel;
+    public GameObject registerPrefab;
 
     /*
 
@@ -43,6 +46,7 @@ public class LMCScript : MonoBehaviour {
         inEditMode = false;
 
         registers = new int[100];
+        pRegisters = new GameObject[100];
         clearAll();
 
         //Test
@@ -52,6 +56,21 @@ public class LMCScript : MonoBehaviour {
 
         opCodes = new string[0];
         currentCode = -1;
+
+        float regWidth = registerPanel.GetComponent<RectTransform>().rect.width / 10;
+        float regHeight = registerPanel.GetComponent<RectTransform>().rect.height / 10;
+
+        for (int dx = 0; dx < 10; ++dx){
+            for (int dy = 0; dy < 10; ++dy)
+            {
+               GameObject reg = Instantiate(registerPrefab) as GameObject;
+                reg.transform.parent = registerPanel.transform;
+                reg.transform.localPosition = new Vector3(regWidth*dy - registerPanel.GetComponent<RectTransform>().rect.height/2, -regHeight*dx + registerPanel.GetComponent<RectTransform>().rect.width/2 - regHeight, 0);
+                pRegisters[10 * dx + dy] = reg;
+                reg.transform.GetChild(0).GetComponent<Text>().text = 10 * dx + dy + "";
+
+            }
+        }
     }
 
     // Update is called once per frame

@@ -1026,6 +1026,8 @@ MonoBehaviour:
   outputField: {fileID: 1275494822}
   accumulator: {fileID: 200144471}
   inputTextField: {fileID: 984620166}
+  registerPanel: {fileID: 1101604813}
+  registerPrefab: {fileID: 154542, guid: 8d07b2073c9de6640b285eaf4d26b944, type: 2}
 --- !u!1 &373451052
 GameObject:
   m_ObjectHideFlags: 0
