@@ -25,6 +25,7 @@ public class LMCScript : MonoBehaviour {
     private Color green = new Color32(0, 255, 0, 255);
     private Color blue = new Color32(69, 247, 255, 255);
     private int prevCode = 0;
+    private int prevMem = 0;
 
     //Interactive variables set in Unity
     public Text parsedTextBox;
@@ -35,6 +36,9 @@ public class LMCScript : MonoBehaviour {
     public InputField inputTextField;
     public GameObject registerPanel;
     public GameObject registerPrefab;
+    public InputField instructionRegister;
+    public InputField memoryAddressRegister;
+    public InputField memoryDataRegister;
     public float autoRunDelay = 1f;
 
     /*
@@ -92,15 +96,19 @@ public class LMCScript : MonoBehaviour {
             else
                 pRegisters[x].transform.GetChild(1).GetComponent<Text>().text = "000";
         }
-        programCounter.text = currentCode + "";
-
-	}
+        
+        
+    }
 
     void clearAll()
     {
         outputField.text = "";
         accumulator.text = "";
         inputTextField.text = "";
+        foreach (GameObject reg in pRegisters)
+            if(reg != null)
+                reg.GetComponent<Image>().color = yellow;
+
     }
 
     void doNextStep()
@@ -113,12 +121,23 @@ public class LMCScript : MonoBehaviour {
 
         //update register colors
         pRegisters[prevCode].GetComponent<Image>().color = yellow;
-        pRegisters[currentCode].GetComponent<Image>().color = blue;
+        pRegisters[prevMem].GetComponent<Image>().color = yellow;
+        pRegisters[currentCode].GetComponent<Image>().color = green;
         prevCode = currentCode;
 
         int code = Int32.Parse(opCodes[currentCode]);
-        
-		if (code == 902) {
+
+        //more register colors and CPU text
+        instructionRegister.text = code + "";
+        programCounter.text = currentCode + "";
+        memoryAddressRegister.text = code % 100 + "";
+        if(code < 900 && code != 0)
+            pRegisters[code % 100].GetComponent<Image>().color = blue;
+        prevMem = code % 100;
+        memoryDataRegister.text = registers[code % 100] + "";
+
+
+        if (code == 902) {
 			sendToOutput ();
 		} else if (code == 901) {
 			getInput ();
