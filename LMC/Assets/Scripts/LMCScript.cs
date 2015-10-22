@@ -20,14 +20,22 @@ public class LMCScript : MonoBehaviour {
     private int[] registers;
     private GameObject[] pRegisters;
 
+    //Color presets
+    private Color yellow = new Color32(245, 255, 69, 255);
+    private Color green = new Color32(0, 255, 0, 255);
+    private Color blue = new Color32(69, 247, 255, 255);
+    private int prevCode = 0;
+
     //Interactive variables set in Unity
     public Text parsedTextBox;
     public InputField scriptInput;
     public InputField outputField;
     public InputField accumulator;
+    public InputField programCounter;
     public InputField inputTextField;
     public GameObject registerPanel;
     public GameObject registerPrefab;
+    public float autoRunDelay = 1f;
 
     /*
 
@@ -64,7 +72,8 @@ public class LMCScript : MonoBehaviour {
             for (int dy = 0; dy < 10; ++dy)
             {
                GameObject reg = Instantiate(registerPrefab) as GameObject;
-                reg.transform.parent = registerPanel.transform;
+                //reg.transform.parent = registerPanel.transform;
+                reg.transform.SetParent(registerPanel.transform, false);
                 reg.transform.localPosition = new Vector3(regWidth*dy - registerPanel.GetComponent<RectTransform>().rect.height/2, -regHeight*dx + registerPanel.GetComponent<RectTransform>().rect.width/2 - regHeight, 0);
                 pRegisters[10 * dx + dy] = reg;
                 reg.transform.GetChild(0).GetComponent<Text>().text = 10 * dx + dy + "";
@@ -76,6 +85,15 @@ public class LMCScript : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         scriptInput.enabled = inEditMode;
+        for (int x = 0; x < 100; ++x)
+        {
+            if (registers[x] != 0)
+                pRegisters[x].transform.GetChild(1).GetComponent<Text>().text = registers[x] + "";
+            else
+                pRegisters[x].transform.GetChild(1).GetComponent<Text>().text = "000";
+        }
+        programCounter.text = currentCode + "";
+
 	}
 
     void clearAll()
@@ -92,6 +110,11 @@ public class LMCScript : MonoBehaviour {
             isRunning = false;
             return;
         }
+
+        //update register colors
+        pRegisters[prevCode].GetComponent<Image>().color = yellow;
+        pRegisters[currentCode].GetComponent<Image>().color = blue;
+        prevCode = currentCode;
 
         int code = Int32.Parse(opCodes[currentCode]);
         
@@ -117,7 +140,10 @@ public class LMCScript : MonoBehaviour {
 
         currentCode++;
         if (isRunning)
+        {
+            StartCoroutine(Pause());
             doNextStep();
+        }
     }
 
     public void onEditClicked()
@@ -139,6 +165,19 @@ public class LMCScript : MonoBehaviour {
         parsedTextBox.text = newParse;
 
         opCodes = result;
+
+        for (int x = 0; x < opCodes.Length; ++x)
+        {
+            try
+            {
+                registers[x] = Int32.Parse(opCodes[x]);
+            }
+            catch (ArgumentNullException)
+            {
+                continue;
+            }
+        }
+
         currentCode = 0;
 
     }
@@ -280,5 +319,10 @@ public class LMCScript : MonoBehaviour {
 		setAccumulator (Avalue - Rvalue);
 		//set neg flags
 	}
+
+    IEnumerator Pause()
+    {
+        yield return new WaitForSeconds(autoRunDelay);
+    }
 
 }
