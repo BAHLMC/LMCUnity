@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class LoadScript : MonoBehaviour
 {
@@ -24,7 +25,6 @@ public class LoadScript : MonoBehaviour
         SECOND DAT
 
         */
-
     public void GoToMainMenu ()
 	{
 		Application.LoadLevel (3);
