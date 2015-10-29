@@ -7,6 +7,8 @@ using System.Collections.Generic;
 
 public class LMCScript : MonoBehaviour {
 
+	public Button myButton;
+	public Sprite mySprite;
     // Private booleans for switching between modes
     private bool isRunning;
     private bool inEditMode;
@@ -226,8 +228,13 @@ public class LMCScript : MonoBehaviour {
 
     public void onRunClicked()
     {
-        isRunning = true;
-        doNextStep();
+	
+		//mySprite = Resources.Load<Sprite>("pauseButton");
+		//gameObject.GetComponent<SpriteRenderer> ().sprite = mySprite;
+		//myButton.image.sprite = mySprite;
+
+		isRunning = true;
+		doNextStep();
     }
 
     public void onResetClicked()
