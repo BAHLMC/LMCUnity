@@ -39,7 +39,7 @@ public class LMCScript : MonoBehaviour {
     public InputField instructionRegister;
     public InputField memoryAddressRegister;
     public InputField memoryDataRegister;
-    public float autoRunDelay = 1f;
+    public float autoRunDelay = 1.5f;
 
     /*
 
@@ -78,10 +78,7 @@ public class LMCScript : MonoBehaviour {
             for (int dy = 0; dy < 10; ++dy)
             {
                GameObject reg = Instantiate(registerPrefab) as GameObject;
-                //reg.transform.parent = registerPanel.transform;
                 reg.transform.SetParent(registerPanel.transform, false);
-                //not necessary after adding an automatic layout component
-                //reg.transform.localPosition = new Vector3(regWidth*dy - registerPanel.GetComponent<RectTransform>().rect.height/2, -regHeight*dx + registerPanel.GetComponent<RectTransform>().rect.width/2 - regHeight, 0);
                 pRegisters[10 * dx + dy] = reg;
                 reg.transform.GetChild(0).GetComponent<Text>().text = 10 * dx + dy + "";
 
@@ -90,8 +87,9 @@ public class LMCScript : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void FixedUpdate () {
         scriptInput.enabled = inEditMode;
+
         for (int x = 0; x < 100; ++x)
         {
             if (registers[x] != 0)
@@ -100,22 +98,23 @@ public class LMCScript : MonoBehaviour {
                 pRegisters[x].transform.GetChild(1).GetComponent<Text>().text = "000";
         }
 
-        float regWidth = registerPanel.GetComponent<RectTransform>().rect.width / 10;
-        float regHeight = registerPanel.GetComponent<RectTransform>().rect.height / 10;
-
-        registerPanel.GetComponent<GridLayoutGroup>().cellSize = new Vector2(regWidth, regHeight);
-
     }
 
-    void clearAll()
+    private void clearAll()
     {
         outputField.text = "";
         accumulator.text = "";
-        inputTextField.text = "";
+        resetInputField();
         foreach (GameObject reg in pRegisters)
             if(reg != null)
                 reg.GetComponent<Image>().color = yellow;
 
+    }
+
+    private void resetInputField()
+    {
+        inputTextField.GetComponent<Image>().color = Color.white;
+        inputTextField.text = "";
     }
 
     void doNextStep()
@@ -137,11 +136,15 @@ public class LMCScript : MonoBehaviour {
         //more register colors and CPU text
         instructionRegister.text = code + "";
         programCounter.text = currentCode + "";
-        memoryAddressRegister.text = code % 100 + "";
-        if(code < 900 && code != 0)
+        memoryAddressRegister.text = "";
+        memoryDataRegister.text = "";
+        if (code < 900 && code != 0)
+        {
             pRegisters[code % 100].GetComponent<Image>().color = blue;
+            memoryAddressRegister.text = code % 100 + "";
+            memoryDataRegister.text = registers[code % 100] + "";
+        }
         prevMem = code % 100;
-        memoryDataRegister.text = registers[code % 100] + "";
 
 
         if (code == 902) {
@@ -167,9 +170,15 @@ public class LMCScript : MonoBehaviour {
         currentCode++;
         if (isRunning)
         {
-            StartCoroutine(Pause());
-            doNextStep();
+            //Should pause between steps to let animations happen
+            StartCoroutine(Delay());
         }
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(autoRunDelay);
+        doNextStep();
     }
 
     public void onEditClicked()
@@ -177,7 +186,7 @@ public class LMCScript : MonoBehaviour {
         inEditMode = true;
     }
 
-    public void onSaveClicked()
+    public void onCompileClicked()
     {
         inEditMode = false;
         String curText = scriptInput.text;
@@ -234,10 +243,13 @@ public class LMCScript : MonoBehaviour {
         doNextStep();
     }
 
-
 	private int getAccumulator()
 	{
-		return Int32.Parse(accumulator.text);
+        if (accumulator.text.Length == 0)
+        {
+            setAccumulator(Int32.Parse(inputTextField.text));
+        }
+        return Int32.Parse(accumulator.text);
 	}
 
 	private int getRegister(int reg) {
@@ -260,7 +272,8 @@ public class LMCScript : MonoBehaviour {
 	private void setAccumulator(int newValue)
 	{
 		accumulator.text = newValue + "";
-	}
+        resetInputField();
+    }
 
     private void sendToOutput()
     {
@@ -270,10 +283,29 @@ public class LMCScript : MonoBehaviour {
     private void getInput()
     {
         //Change color of input field and wait for input
+        accumulator.text = "";
         String input = inputTextField.text;
         if (input.Length == 0)
-            input = "5";
-        setAccumulator(Int32.Parse(input));
+        {
+            inputTextField.GetComponent<Image>().color = Color.cyan;
+            isRunning = false;
+            StartCoroutine(WaitForKeyDown(KeyCode.Return));
+        }
+        else
+        {
+            setAccumulator(Int32.Parse(inputTextField.text));
+            //TODO : Show the transition from input to accumulator
+        }
+    }
+
+    IEnumerator WaitForKeyDown(KeyCode keyCode)
+    {
+        while (!Input.GetKeyDown(keyCode))
+            yield return null;
+
+        isRunning = true;
+        doNextStep();
+
     }
 
     private void checkForBranch(int code)
@@ -316,16 +348,16 @@ public class LMCScript : MonoBehaviour {
     private void branch(int branchCode)
     {
         //Go to the operation 1 more than the branch code that is passed in
+        currentCode = registers[branchCode];
     }
-	
 
-	private void loadOp( int code) {
+    private void storeOp( int code) {
 		int register = code % 100;
 		int Avalue = getAccumulator ();
 		setRegister (register, Avalue);
 	}
 
-	private void storeOp( int code) {
+	private void loadOp( int code) {
 		int register = code % 100;
 		int Rvalue = getRegister (register);
 		setAccumulator (Rvalue);
@@ -345,10 +377,4 @@ public class LMCScript : MonoBehaviour {
 		setAccumulator (Avalue - Rvalue);
 		//set neg flags
 	}
-
-    IEnumerator Pause()
-    {
-        yield return new WaitForSeconds(autoRunDelay);
-    }
-
 }

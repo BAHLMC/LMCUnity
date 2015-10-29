@@ -36,11 +36,7 @@ public class LoadScript : MonoBehaviour
 			"INP","STA FIRST","INP","STA SECOND","INP",
 			"ADD FIRST","ADD SECOND","SUB FIRST","OUT","HLT","FIRST DAT","SECOND DAT"
 		};
-		string[] ret = StartScan (toTest);
-		for (int i = 0; i < ret.Length; i++) {
-			Debug.Log (ret [i]);
-		}
-        return ret;
+        return StartScan(toTest);
 	}
 
 	static string convertRegToString (int reg)
