@@ -26,6 +26,7 @@ public class LMCScript : MonoBehaviour {
     private Color yellow = new Color32(245, 255, 69, 255);
     private Color green = new Color32(0, 255, 0, 255);
     private Color blue = new Color32(69, 247, 255, 255);
+    private Color paleYellow = new Color32(254, 255, 197, 255);
     private int prevCode = 0;
     private int prevMem = 0;
 
@@ -107,10 +108,6 @@ public class LMCScript : MonoBehaviour {
         outputField.text = "";
         accumulator.text = "";
         resetInputField();
-        foreach (GameObject reg in pRegisters)
-            if(reg != null)
-                reg.GetComponent<Image>().color = yellow;
-
     }
 
     private void resetInputField()
@@ -228,11 +225,6 @@ public class LMCScript : MonoBehaviour {
 
     public void onRunClicked()
     {
-	
-		//mySprite = Resources.Load<Sprite>("pauseButton");
-		//gameObject.GetComponent<SpriteRenderer> ().sprite = mySprite;
-		//myButton.image.sprite = mySprite;
-
 		isRunning = true;
 		doNextStep();
     }
@@ -242,6 +234,26 @@ public class LMCScript : MonoBehaviour {
         clearAll();
         isRunning = false;
         currentCode = 0;
+        clearRegisters();
+    }
+
+    void clearRegisters()
+    {
+        for (int x = 0; x < 100; ++x)
+        {
+            registers[x] = 0;
+        }
+
+        foreach (GameObject reg in pRegisters) {
+            if (reg != null)
+            {
+                reg.GetComponent<Image>().color = paleYellow;
+                reg.transform.GetChild(1).GetComponent<Text>().text = "000";
+            }
+        }
+
+        onCompileClicked();
+
     }
 
     public void onStepClicked()

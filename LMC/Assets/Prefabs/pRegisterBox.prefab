@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: .959837735, g: 1, b: .272058845, a: 1}
+  m_Color: {r: .996855974, g: 1, b: .772058845, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -290,11 +290,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: m_Color.r
-      value: .959837735
+      value: .996855974
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Color.b
-      value: .272058845
+      value: .772058845
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Color.g
