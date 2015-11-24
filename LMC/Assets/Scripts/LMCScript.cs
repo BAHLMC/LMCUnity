@@ -359,12 +359,19 @@ public class LMCScript : MonoBehaviour {
 	
 	private void setAccumulator(int newValue)
 	{
+        float timeEllapsed = 0.0f;
+        float lastTime = Time.unscaledTime;
         GameObject anim = Instantiate(animationPrefab) as GameObject;
         anim.transform.SetParent(bgPanel.transform, false);
         anim.transform.GetChild(0).GetComponent<Text>().text = newValue + "";
         anim.transform.position = inputTextField.transform.position;
         StartCoroutine(MoveTo(accumulator.transform.position, anim));
-
+        //This is somehow an infinite loop
+        /*while (timeEllapsed < animTime)
+        {
+            timeEllapsed += Time.unscaledTime - lastTime;
+            lastTime = Time.unscaledTime;
+        }*/
         
 
 		accumulator.text = newValue + "";
