@@ -346,7 +346,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 956963286}
   m_Direction: 2
   m_Value: 1
-  m_Size: .614105523
+  m_Size: .41664952
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2325,7 +2325,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 458918789}
   m_Direction: 2
   m_Value: 0
-  m_Size: .985738754
+  m_Size: .979171038
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2585,7 +2585,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 561885322}
-        m_MethodName: GoToGame
+        m_MethodName: GoToMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

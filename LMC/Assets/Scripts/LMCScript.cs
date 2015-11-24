@@ -10,8 +10,9 @@ public class LMCScript : MonoBehaviour {
 	public Button myButton;
 	public Sprite mySprite;
     // Private booleans for switching between modes
-    private bool isRunning;
-    private bool inEditMode;
+    private bool isRunning = false;
+    private bool waitingOnInput = false;
+    private bool inEditMode = true;
 
     //Variables needed for parsing and running the op codes
     private int currentCode;
@@ -44,22 +45,8 @@ public class LMCScript : MonoBehaviour {
     public InputField memoryDataRegister;
     public float autoRunDelay = 1.5f;
 
-    /*
-
-    901 INP INPUT
-
-    902 OUT OUTPUT
-
-    DAT DATA
-
-    */
-
     // Use this for initialization
     void Start () {
-
-        isRunning = false;
-        inEditMode = false;
-
         registers = new int[100];
         pRegisters = new GameObject[100];
         clearAll();
@@ -216,17 +203,41 @@ public class LMCScript : MonoBehaviour {
 
     }
 
+    public void parseInput()
+    {
+        String input = inputTextField.text;
+        if (input.Length > 0)
+        {
+            setAccumulator(Int32.Parse(inputTextField.text));
+            waitingOnInput = false;
+            doNextStep();
+        }
+    }
+
     public void onPlayPauseClicked()
     {
         isRunning = !isRunning;
-        if (isRunning)
+        if (waitingOnInput)
+        {
+            parseInput();
+        }
+        else if (isRunning)
+        {
             doNextStep();
+        }
     }
 
-    public void onRunClicked()
+    public void onStepClicked()
     {
-		isRunning = true;
-		doNextStep();
+        isRunning = false;
+        if (waitingOnInput)
+        {
+            parseInput();
+        }
+        else
+        {
+            doNextStep();
+        }
     }
 
     public void onResetClicked()
@@ -254,12 +265,6 @@ public class LMCScript : MonoBehaviour {
 
         onCompileClicked();
 
-    }
-
-    public void onStepClicked()
-    {
-        isRunning = false;
-        doNextStep();
     }
 
 	private int getAccumulator()
@@ -308,6 +313,7 @@ public class LMCScript : MonoBehaviour {
         {
             inputTextField.GetComponent<Image>().color = Color.cyan;
             isRunning = false;
+            waitingOnInput = true;
             StartCoroutine(WaitForKeyDown(KeyCode.Return));
         }
         else
@@ -323,7 +329,7 @@ public class LMCScript : MonoBehaviour {
             yield return null;
 
         isRunning = true;
-        doNextStep();
+        parseInput();
 
     }
 
@@ -348,26 +354,26 @@ public class LMCScript : MonoBehaviour {
             if (value > 0)
             {
                 //Go to the register
-                branch(branchCode);
+                branch(register);
             }
         } else if (branchCode == 7)
         {
             if (value == 0)
             {
                 //Go to the register
-                branch(branchCode);
+                branch(register);
             }
         } else if (branchCode == 6)
         {
             //Go to the register
-            branch(branchCode);
+            branch(register);
         }
     }
     
-    private void branch(int branchCode)
+    private void branch(int registerCode)
     {
         //Go to the operation 1 more than the branch code that is passed in
-        currentCode = registers[branchCode];
+        currentCode = registers[registerCode+1];
     }
 
     private void storeOp( int code) {

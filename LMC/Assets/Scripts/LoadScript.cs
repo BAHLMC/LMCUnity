@@ -32,10 +32,6 @@ public class LoadScript : MonoBehaviour
 
 	public static string[] callStartScanTest (string[] toTest)
 	{
-		string[] toTest1 = new string[12] {
-			"INP","STA FIRST","INP","STA SECOND","INP",
-			"ADD FIRST","ADD SECOND","SUB FIRST","OUT","HLT","FIRST DAT","SECOND DAT"
-		};
         return StartScan(toTest);
 	}
 
@@ -58,7 +54,6 @@ public class LoadScript : MonoBehaviour
 			}
 		}
 		string[] ret = new string[al.Length];
-		List<string> needed = new List<string> ();
 		for (int i = 0; i < al.Length; i++) {
 			string s = al [i];
 			string[] arr = s.Split (' ');
