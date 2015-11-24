@@ -44,8 +44,9 @@ public class LMCScript : MonoBehaviour {
     private int prevMem = 0;
 
     //Animation Stuff
-    private float animTime = 2.0f;
+    private float animTime;
     private float lerpTime = 0.05f;
+    private bool isAnimating = false;
 
     //Interactive variables set in Unity
     public Text parsedTextBox;
@@ -68,7 +69,7 @@ public class LMCScript : MonoBehaviour {
         registers = new int[100];
         pRegisters = new GameObject[100];
         clearAll();
-
+        animTime = autoRunDelay;
         //Test
         parsedTextBox.text = "The parsed text from the script will go here";
         accumulator.text = "0";
@@ -358,6 +359,12 @@ public class LMCScript : MonoBehaviour {
 	
 	private void setAccumulator(int newValue)
 	{
+        GameObject anim = Instantiate(animationPrefab) as GameObject;
+        anim.transform.SetParent(bgPanel.transform, false);
+        anim.transform.GetChild(0).GetComponent<Text>().text = newValue + "";
+        anim.transform.position = inputTextField.transform.position;
+        StartCoroutine(MoveTo(accumulator.transform.position, anim));
+
 		accumulator.text = newValue + "";
         resetInputField();
     }
