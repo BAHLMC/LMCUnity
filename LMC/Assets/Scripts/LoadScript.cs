@@ -77,7 +77,11 @@ public class LoadScript : MonoBehaviour
 				ret [i] = "7" + convertRegToString (dats [arr [1]]);
 			} else if (arr [0] == "BRP") {
 				ret [i] = "8" + convertRegToString (dats [arr [1]]);
-			}
+			} else if (arr[1] != "DAT")
+            {
+                //If it is none of the above commands and not related to a DAT register, we will return this erro code
+                ret[i] = "-1";
+            }
 
 		}
 		return ret;

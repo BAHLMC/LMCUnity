@@ -7,8 +7,20 @@ using System.Collections.Generic;
 
 public class LMCScript : MonoBehaviour {
 
-	public Button myButton;
-	public Sprite mySprite;
+    // Error Variables
+    public GUISkin errorGUISkin;
+    private bool needsReset = false;
+    private bool errorFound = false;
+    private int errorCode = -1;
+    private String[] errorStrings = new string[] {
+        "No HALT command found. The program must contain at least one halt.",
+        "Invalid command in the script. Please confirm that all commands you listed are accepted.",
+        "You have entered too many commands. This app allows a max of 100 commands. Please shorten your code.",
+        "The accumulator has gotten too large. There is a maximum of 3 digits allowed for this app. Please press reset and rerun your code.",
+        "You tried to branch to a register that is not allowed. This could be either a data register or a register after your last data register. Please checek your code and then press reset before recompiling.",
+        "Please compile your code before attempting to run it. Compile can be found in the bottom left of the screen."
+    };
+
     // Private booleans for switching between modes
     private bool isRunning = false;
     private bool waitingOnInput = false;
@@ -53,6 +65,7 @@ public class LMCScript : MonoBehaviour {
 
         //Test
         parsedTextBox.text = "The parsed text from the script will go here";
+        accumulator.text = "0";
 
         scriptInput.text = "INP\nSTA FIRST\nINP\nSTA SECOND\nINP\nADD FIRST\nADD SECOND\nSUB FIRST\nOUT\nHLT\nFIRST DAT\nSECOND DAT";
 
@@ -103,9 +116,48 @@ public class LMCScript : MonoBehaviour {
         inputTextField.text = "";
     }
 
+    private bool hasErrors()
+    {
+        /*
+        *
+
+        "No HALT command found. The program must contain at least one halt.",
+        "Invalid command in the script. Please confirm that all commands you listed are accepted.",
+        "You have entered too many commands. This app allows a max of 100 commands. Please shorten your code.",
+        "The accumulator has gotten too large. There is a maximum of 3 digits allowed for this app",
+        "You tried to branch to a register that is not allowed. This could be either a data register or a register after your last data register. Please checek your code.",
+        "Please compile your code before attempting to run it. Compile can be found in the bottom left of the screen."
+
+        *
+        */
+
+        if (!parsedTextBox.text.Contains("000")) {
+            foundError(0);
+            return true;
+        }
+        else if (parsedTextBox.text.Contains("-1"))
+        {
+            foundError(1);
+            return true;
+        }
+        else if (Int32.Parse(accumulator.text) > 1000)
+        {
+            foundError(3);
+            return true;
+        } else if (parsedTextBox.text.Length == 0)
+        {
+            foundError(5);
+            return true;
+        }
+        else
+        {
+            return needsReset;
+        }
+    }
+
     void doNextStep()
     {
-        if (currentCode > opCodes.Length || currentCode < 0)
+        if (hasErrors() || currentCode > opCodes.Length || currentCode < 0)
         {
             isRunning = false;
             return;
@@ -178,6 +230,10 @@ public class LMCScript : MonoBehaviour {
         String curText = scriptInput.text;
         string[] input = curText.Split('\n');
         string[] result = LoadScript.callStartScanTest(input);
+        if (result.Length > 100) {
+            foundError(3);
+            return;
+        }
         String newParse = "";
         for (int i = 0; i < result.Length; i++)
         {
@@ -242,6 +298,7 @@ public class LMCScript : MonoBehaviour {
 
     public void onResetClicked()
     {
+        needsReset = false;
         clearAll();
         isRunning = false;
         currentCode = 0;
@@ -373,6 +430,12 @@ public class LMCScript : MonoBehaviour {
     private void branch(int registerCode)
     {
         //Go to the operation 1 more than the branch code that is passed in
+        if (registerCode + 1 > registers.Length)
+        {
+            foundError(4);
+            return;
+        }
+
         currentCode = registers[registerCode+1];
     }
 
@@ -402,4 +465,43 @@ public class LMCScript : MonoBehaviour {
 		setAccumulator (Avalue - Rvalue);
 		//set neg flags
 	}
+
+
+    // GUI stuff pertaining to error messages
+    void OnGUI()
+    {
+        if (errorFound)
+        {
+            GUI.skin = errorGUISkin;
+            GUI.Window(0, new Rect((Screen.width / 4), (Screen.height / 4), (Screen.width / 2), (Screen.height / 2)), ShowErrorMessagePopup, "Invalid word");
+
+        }
+    }
+
+    void ShowErrorMessagePopup(int windowID)
+    {
+        // You may put a label to show a message to the player
+        float width = Screen.width / 2;
+        float height = Screen.height / 2;
+
+        GUI.Label(new Rect(width / 4, height / 4, width / 2, height / 2), errorStrings[errorCode]);
+
+        // You may put a button to close the pop up too
+
+        if (GUI.Button(new Rect(width / 2 - 35, height * 3 /4 + 10, 70, 30), "OK"))
+        {
+            errorFound = false;
+            // After an error has been noted, we will need to either clear everything or recompile or something, this would happen here
+            // Error code 3 is that the accumulator is too large. Error 4 is that we branched to an illegal place. In either case, they need to reset and fix the script.
+            needsReset = errorCode == 3 || errorCode == 4;
+        }
+
+    }
+    
+    private void foundError(int code)
+    {
+        errorFound = true;
+        errorCode = code;
+    }
+
 }
