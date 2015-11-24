@@ -43,6 +43,10 @@ public class LMCScript : MonoBehaviour {
     private int prevCode = 0;
     private int prevMem = 0;
 
+    //Animation Stuff
+    private float animTime = 2.0f;
+    private float lerpTime = 0.05f;
+
     //Interactive variables set in Unity
     public Text parsedTextBox;
     public InputField scriptInput;
@@ -56,6 +60,8 @@ public class LMCScript : MonoBehaviour {
     public InputField memoryAddressRegister;
     public InputField memoryDataRegister;
     public float autoRunDelay = 1.5f;
+    public GameObject animationPrefab;
+    public GameObject bgPanel;
 
     // Use this for initialization
     void Start () {
@@ -502,6 +508,19 @@ public class LMCScript : MonoBehaviour {
     {
         errorFound = true;
         errorCode = code;
+    }
+
+    IEnumerator MoveTo(Vector3 destination, GameObject obj)
+    {
+        float timeEllapsed = 0;
+        Vector3 origin = obj.transform.position;
+
+        while (timeEllapsed < animTime)
+        {
+            obj.transform.position = Vector3.Lerp(origin, destination, timeEllapsed / animTime);
+            timeEllapsed += lerpTime;
+            yield return new WaitForSeconds(lerpTime);
+        }
     }
 
 }
