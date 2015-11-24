@@ -147,7 +147,7 @@ public class LMCScript : MonoBehaviour {
             foundError(1);
             return true;
         }
-        else if (Int32.Parse(accumulator.text) > 1000)
+        else if (accumulator.text != "" && Int32.Parse(accumulator.text) > 1000 )
         {
             foundError(3);
             return true;
@@ -365,6 +365,8 @@ public class LMCScript : MonoBehaviour {
         anim.transform.position = inputTextField.transform.position;
         StartCoroutine(MoveTo(accumulator.transform.position, anim));
 
+        
+
 		accumulator.text = newValue + "";
         resetInputField();
     }
@@ -528,6 +530,7 @@ public class LMCScript : MonoBehaviour {
             timeEllapsed += lerpTime;
             yield return new WaitForSeconds(lerpTime);
         }
+        Destroy(obj);
     }
 
 }
