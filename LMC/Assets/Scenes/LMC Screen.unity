@@ -1112,8 +1112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd6e4dd582854444a14935715dd075b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myButton: {fileID: 0}
-  mySprite: {fileID: 0}
+  errorGUISkin: {fileID: 11400000, guid: 9f600fb7bd50f5f439734e92ee76857e, type: 2}
   parsedTextBox: {fileID: 304093823}
   scriptInput: {fileID: 964543514}
   outputField: {fileID: 1275494822}
