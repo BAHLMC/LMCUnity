@@ -1233,8 +1233,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   errorGUISkin: {fileID: 11400000, guid: 9f600fb7bd50f5f439734e92ee76857e, type: 2}
-  helpGUISkin: {fileID: 11400000, guid: 5d89f372ca692461494e935f6907ac78, type: 2}
-  helpImage: {fileID: 2800000, guid: 8afd3a0c3ac9abd4686d80ecbf8bcc26, type: 3}
+  helpGUISkin: {fileID: 11400000, guid: 9f600fb7bd50f5f439734e92ee76857e, type: 2}
+  helpImage: {fileID: 0}
   parsedTextBox: {fileID: 304093823}
   scriptInput: {fileID: 964543514}
   outputField: {fileID: 1275494822}

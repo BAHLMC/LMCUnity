@@ -517,7 +517,7 @@ public class LMCScript : MonoBehaviour {
 		if (showHelpBox)
 		{
 			GUI.skin = helpGUISkin;
-			GUI.Window(0, new Rect((Screen.width / 4), (Screen.height / 4), (Screen.width / 2), (Screen.height / 2)), ShowHelpBox, "Help");
+			GUI.Window(0, new Rect((Screen.width / 4), (Screen.height *.1f), (Screen.width / 2), (Screen.height *.75f)), ShowHelpBox, "Help");
 			
 		}
 
@@ -548,15 +548,18 @@ public class LMCScript : MonoBehaviour {
 		
 		// You may put a label to show a message to the player
 		float width = Screen.width / 2;
-		float height = Screen.height / 2;
+		float height = Screen.height *.75f;
 
-		GUI.backgroundColor = Color.black;
+		GUI.Label(new Rect(width * .05f, height * .05f, width * .9f, height * .74f), "Start by typing a program into the text box in the script panel. When your program is ready, press compile in the bottom left of the screen. Then press play. " +
+            "\nInput can be found just left of the center of the screen with the final output displaying right below it. \n\n" +
+            "\nThe Program counter keeps track of what instruction we are on. " +
+            "\nThe Accumulator shows the current accumulated value that is stored in temporary memory " +
+            "\nThe Mem Address Register is the addess of the register that we are writing to or reading from." +
+            "\nThe Insturction register is the full instruction that is found in the memory address of the program counter. As a reminder of what the instruction does, you can find it on the left next to the line of code it corresponds with." +
+            "\nThe Mem Data Register field is the value that we are reading in from the address in the Mem Address Register textbox.");
 
-
-		GUI.Label(new Rect(width / 4, height / 4, width / 2, height / 2), "Image to GO HERE" );
-
-		float gwidth = GUI.width;
-		float gheight = GUI.height;
+		float gwidth = width;
+		float gheight = height;
 
 		GUI.DrawTexture(new Rect(gwidth-10, gheight-10, gwidth-10, gheight-10), helpImage, ScaleMode.ScaleToFit, true, 10.0F);
 
