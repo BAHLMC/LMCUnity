@@ -44,6 +44,7 @@ GameObject:
   - 224: {fileID: 22406522}
   - 222: {fileID: 22252646}
   - 114: {fileID: 11448522}
+  - 111: {fileID: 11136714}
   m_Layer: 5
   m_Name: pRegisterBox
   m_TagString: Untagged
@@ -68,6 +69,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!111 &11136714
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 154542}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &11405258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -311,6 +326,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Color.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_PlayAutomatically
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
