@@ -21,6 +21,12 @@ public class LMCScript : MonoBehaviour {
         "Please compile your code before attempting to run it. Compile can be found in the bottom left of the screen."
     };
 
+
+	// HelpBox
+	public GUISkin helpGUISkin;
+	private bool showHelpBox = false;
+	public Texture helpImage;
+
     // Private booleans for switching between modes
     private bool isRunning = false;
     private bool waitingOnInput = false;
@@ -226,6 +232,8 @@ public class LMCScript : MonoBehaviour {
         doNextStep();
     }
 
+
+
     public void onEditClicked()
     {
         inEditMode = true;
@@ -311,6 +319,13 @@ public class LMCScript : MonoBehaviour {
         currentCode = 0;
         clearRegisters();
     }
+
+
+	public void onHelpClicked()
+	{
+		showHelpBox = !showHelpBox;
+	}
+
 
     void clearRegisters()
     {
@@ -489,7 +504,7 @@ public class LMCScript : MonoBehaviour {
 	}
 
 
-    // GUI stuff pertaining to error messages
+    // GUI stuff pertaining to error messages & Help Box
     void OnGUI()
     {
         if (errorFound)
@@ -498,6 +513,14 @@ public class LMCScript : MonoBehaviour {
             GUI.Window(0, new Rect((Screen.width / 4), (Screen.height / 4), (Screen.width / 2), (Screen.height / 2)), ShowErrorMessagePopup, "Invalid word");
 
         }
+
+		if (showHelpBox)
+		{
+			GUI.skin = helpGUISkin;
+			GUI.Window(0, new Rect((Screen.width / 4), (Screen.height / 4), (Screen.width / 2), (Screen.height / 2)), ShowHelpBox, "Help");
+			
+		}
+
     }
 
     void ShowErrorMessagePopup(int windowID)
@@ -520,12 +543,46 @@ public class LMCScript : MonoBehaviour {
 
     }
     
+	void ShowHelpBox(int windowID)
+	{
+		
+		// You may put a label to show a message to the player
+		float width = Screen.width / 2;
+		float height = Screen.height / 2;
+
+		GUI.backgroundColor = Color.black;
+
+
+		GUI.Label(new Rect(width / 4, height / 4, width / 2, height / 2), "Image to GO HERE" );
+
+		float gwidth = GUI.width;
+		float gheight = GUI.height;
+
+		GUI.DrawTexture(new Rect(gwidth-10, gheight-10, gwidth-10, gheight-10), helpImage, ScaleMode.ScaleToFit, true, 10.0F);
+
+		// You may put a button to close the pop up too
+		if (GUI.Button(new Rect(width / 2 - 35, height * 3 /4 + 10, 70, 30), "Got it!"))
+		{
+			showHelpBox = false;
+			
+		}
+		
+	}
+
+
     private void foundError(int code)
     {
         errorFound = true;
         errorCode = code;
     }
 
+
+
+
+
+
+
+	//something else
     IEnumerator MoveTo(Vector3 destination, GameObject obj)
     {
         float timeEllapsed = 0;
@@ -540,4 +597,13 @@ public class LMCScript : MonoBehaviour {
         Destroy(obj);
     }
 
+
+
+
+
+	
+
+
 }
+
+
