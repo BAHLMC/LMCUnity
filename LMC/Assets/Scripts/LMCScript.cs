@@ -406,7 +406,6 @@ public class LMCScript : MonoBehaviour {
         if (input.Length == 0)
         {
             inputTextField.GetComponent<Image>().color = Color.cyan;
-            isRunning = false;
             waitingOnInput = true;
             StartCoroutine(WaitForKeyDown(KeyCode.Return));
         }
