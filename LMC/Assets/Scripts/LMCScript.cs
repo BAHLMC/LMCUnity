@@ -219,7 +219,7 @@ public class LMCScript : MonoBehaviour {
 		}
 
         currentCode++;
-        if (isRunning)
+        if (isRunning && !waitingOnInput)
         {
             //Should pause between steps to let animations happen
             StartCoroutine(Delay());

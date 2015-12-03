@@ -718,10 +718,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 361530293}
   m_RootOrder: 0
-  m_AnchorMin: {x: .330000013, y: .5}
-  m_AnchorMax: {x: .520231605, y: 1}
-  m_AnchoredPosition: {x: 14.5, y: -3.05180001e-05}
-  m_SizeDelta: {x: -34, y: -19}
+  m_AnchorMin: {x: .435000032, y: .597507}
+  m_AnchorMax: {x: .543144822, y: .910000026}
+  m_AnchoredPosition: {x: .5, y: 1.92602193}
+  m_SizeDelta: {x: -1, y: 0}
   m_Pivot: {x: .5, y: .500000834}
 --- !u!114 &213103158
 MonoBehaviour:
@@ -744,12 +744,12 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 5
+    m_Alignment: 4
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
@@ -988,10 +988,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 382537219}
   m_RootOrder: 2
-  m_AnchorMin: {x: .54587394, y: .130740017}
+  m_AnchorMin: {x: .633000016, y: .130740017}
   m_AnchorMax: {x: .980000019, y: .906000018}
-  m_AnchoredPosition: {x: -1.65869141, y: -1.02099991}
-  m_SizeDelta: {x: 5, y: 5.72200012}
+  m_AnchoredPosition: {x: 3.24998474, y: -3.5}
+  m_SizeDelta: {x: -6, y: 1}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &304093823
 MonoBehaviour:
@@ -2487,9 +2487,9 @@ RectTransform:
   m_Father: {fileID: 382537219}
   m_RootOrder: 1
   m_AnchorMin: {x: .0199999996, y: .130740017}
-  m_AnchorMax: {x: .5, y: .906000018}
-  m_AnchoredPosition: {x: -.128501892, y: -1.08172607}
-  m_SizeDelta: {x: -1.33500004, y: 6}
+  m_AnchorMax: {x: .633000016, y: .906000018}
+  m_AnchoredPosition: {x: -.249992371, y: -1.08172607}
+  m_SizeDelta: {x: -1.49997997, y: 6}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &964543514
 MonoBehaviour:
@@ -4170,7 +4170,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
