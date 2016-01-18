@@ -80,7 +80,9 @@ public class LMCScript : MonoBehaviour {
         parsedTextBox.text = "The parsed text from the script will go here";
         accumulator.text = "0";
 
-        scriptInput.text = "INP\nSTA FIRST\nINP\nSTA SECOND\nINP\nADD FIRST\nADD SECOND\nSUB FIRST\nOUT\nHLT\nFIRST DAT\nSECOND DAT";
+		string tempString = "INP\nSTA FIRST\nINP\nSTA SECOND\nINP\nADD FIRST\nADD SECOND\nSUB FIRST\nOUT\nHLT\nFIRST DAT\nSECOND DAT";
+		scriptInput.text = tempString;
+		PlayerPrefs.SetString ("currentScriptText", tempString);
 
         opCodes = new string[0];
         currentCode = -1;

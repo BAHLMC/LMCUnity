@@ -25,6 +25,16 @@ public class LoadScript : MonoBehaviour
         SECOND DAT
 
         */
+
+	public InputField saveScriptInput;
+	void Start(){
+		string scriptText = PlayerPrefs.GetString ("currentScriptText","NONE");
+		if (scriptText != "NONE") {
+			saveScriptInput.text = scriptText;
+		} else {
+
+		}
+	}
     public void GoToMainMenu ()
 	{
 		Application.LoadLevel (3);
