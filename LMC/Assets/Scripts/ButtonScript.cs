@@ -25,6 +25,9 @@ public class ButtonScript : MonoBehaviour {
 	public void GoToOptions () {
 		Application.LoadLevel(3);
 	}
+	public void GoToTutorial () {
+		Application.LoadLevel(4);
+	}
 	public void GoToExit () {
 		Application.Quit();
 	}
