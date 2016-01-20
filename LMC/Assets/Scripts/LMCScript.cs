@@ -565,6 +565,13 @@ public class LMCScript : MonoBehaviour {
 		GUI.DrawTexture(new Rect(gwidth-10, gheight-10, gwidth-10, gheight-10), helpImage, ScaleMode.ScaleToFit, true, 10.0F);
 
 		// You may put a button to close the pop up too
+		if (GUI.Button(new Rect(width / 2 - 35, height * 3 /4 -50, 70, 30), "Tutorial"))
+		{
+			showHelpBox = false;
+			Application.LoadLevel(4);
+	
+		}
+
 		if (GUI.Button(new Rect(width / 2 - 35, height * 3 /4 + 10, 70, 30), "Got it!"))
 		{
 			showHelpBox = false;
