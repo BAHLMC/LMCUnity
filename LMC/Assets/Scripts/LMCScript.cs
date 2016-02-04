@@ -80,9 +80,16 @@ public class LMCScript : MonoBehaviour {
         parsedTextBox.text = "The parsed text from the script will go here";
         accumulator.text = "0";
 
-		string tempString = "INP\nSTA FIRST\nINP\nSTA SECOND\nINP\nADD FIRST\nADD SECOND\nSUB FIRST\nOUT\nHLT\nFIRST DAT\nSECOND DAT";
-		scriptInput.text = tempString;
-		PlayerPrefs.SetString ("currentScriptText", tempString);
+        string tempString = "INP\nSTA FIRST\nINP\nSTA SECOND\nINP\nADD FIRST\nADD SECOND\nSUB FIRST\nOUT\nHLT\nFIRST DAT\nSECOND DAT";
+        string scriptText = PlayerPrefs.GetString("currentScriptText", "404");
+        if(scriptText == "404")
+        {
+            scriptInput.text = tempString;
+        }
+        else
+        {
+            scriptInput.text = scriptText;
+        }
 
         opCodes = new string[0];
         currentCode = -1;
@@ -115,6 +122,7 @@ public class LMCScript : MonoBehaviour {
             else
                 pRegisters[x].transform.GetChild(1).GetComponent<Text>().text = "000";
         }
+        PlayerPrefs.SetString("currentScriptText", scriptInput.text);
 
     }
 

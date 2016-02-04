@@ -26,13 +26,16 @@ public class LoadScript : MonoBehaviour
 
         */
 
-	public InputField saveScriptInput;
-	void Start(){
+    public Text saveScriptInput;
+    public Text filenameText;
+    void Start(){
 		string scriptText = PlayerPrefs.GetString ("currentScriptText","NONE");
+        string filename = PlayerPrefs.GetString("filename", "404");
 		if (scriptText != "NONE") {
+            filenameText.text = filename;
 			saveScriptInput.text = scriptText;
 		} else {
-
+            saveScriptInput.text = "";
 		}
 	}
     public void GoToMainMenu ()
