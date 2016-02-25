@@ -66,7 +66,7 @@ public class LMCScript : MonoBehaviour {
     public InputField instructionRegister;
     public InputField memoryAddressRegister;
     public InputField memoryDataRegister;
-    public float autoRunDelay = 1.5f;
+    public float autoRunDelay = 2.0f;
     public GameObject animationPrefab;
     public GameObject bgPanel;
 
@@ -75,7 +75,7 @@ public class LMCScript : MonoBehaviour {
         registers = new int[100];
         pRegisters = new GameObject[100];
         clearAll();
-        animTime = autoRunDelay;
+        animTime = autoRunDelay/2;
         //Test
         parsedTextBox.text = "The parsed text from the script will go here";
         accumulator.text = "0";
@@ -289,9 +289,12 @@ public class LMCScript : MonoBehaviour {
         String input = inputTextField.text;
         if (input.Length > 0)
         {
+
+            StartCoroutine(MoveTo(inputTextField.transform.position, accumulator.transform.position, Int32.Parse(inputTextField.text)+"", true));
+
             setAccumulator(Int32.Parse(inputTextField.text));
             waitingOnInput = false;
-            doNextStep();
+            //doNextStep();
         }
     }
 
@@ -385,26 +388,15 @@ public class LMCScript : MonoBehaviour {
 	private void setAccumulator(int newValue)
 	{
 
-        GameObject anim = Instantiate(animationPrefab) as GameObject;
-        anim.transform.SetParent(bgPanel.transform, false);
-        anim.transform.GetChild(0).GetComponent<Text>().text = newValue + "";
-        anim.transform.position = inputTextField.transform.position;
-        Animation pAnim = anim.GetComponent<Animation>();
-        AnimationCurve curve = AnimationCurve.Linear(0, anim.transform.localPosition.x, animTime, anim.transform.InverseTransformPoint(accumulator.transform.position).x);
-        AnimationClip clip = new AnimationClip();
-        clip.legacy = true;
-        clip.SetCurve("", typeof(Transform), "localPosition.x", curve);
-        curve = AnimationCurve.Linear(0, anim.transform.localPosition.y, animTime, anim.transform.InverseTransformPoint(accumulator.transform.position).y);
-        clip.SetCurve("", typeof(Transform), "localPosition.y", curve);
-        pAnim.AddClip(clip, "move");
-        pAnim.Play("move");
-
         accumulator.text = newValue + "";
         resetInputField();
     }
 
     private void sendToOutput()
     {
+
+        StartCoroutine(MoveTo(accumulator.transform.position, outputField.transform.position, getAccumulator() + "", false));
+
         outputField.text = getAccumulator() +"";
     }
 
@@ -488,27 +480,41 @@ public class LMCScript : MonoBehaviour {
     private void storeOp( int code) {
 		int register = code % 100;
 		int Avalue = getAccumulator ();
-		setRegister (register, Avalue);
+
+        StartCoroutine(MoveTo(accumulator.transform.position, pRegisters[register].transform.position, getAccumulator() + "", false));
+
+        setRegister (register, Avalue);
 	}
 
 	private void loadOp( int code) {
 		int register = code % 100;
 		int Rvalue = getRegister (register);
-		setAccumulator (Rvalue);
+
+        StartCoroutine(MoveTo(pRegisters[register].transform.position, memoryDataRegister.transform.position, Rvalue + "", false));
+
+        setAccumulator (Rvalue);
 	}
 
 	private void addOp( int code) {
 		int register = code % 100;
 		int Avalue = getAccumulator();
 		int Rvalue = getRegister (register);
-		setAccumulator (Rvalue + Avalue);
+
+        StartCoroutine(MoveTo(pRegisters[register].transform.position, memoryDataRegister.transform.position, Rvalue+"", false));
+
+        setAccumulator (Rvalue + Avalue);
 	}
 
 	private void subOp( int code) {
 		int register = code % 100;
 		int Avalue = getAccumulator();
 		int Rvalue = getRegister (register);
-		setAccumulator (Avalue - Rvalue);
+
+        StartCoroutine(MoveTo(pRegisters[register].transform.position, memoryDataRegister.transform.position, Rvalue + "", false));
+
+        setAccumulator (Avalue - Rvalue);
+
+
 		//set neg flags
 	}
 
@@ -595,27 +601,26 @@ public class LMCScript : MonoBehaviour {
         errorCode = code;
     }
 
-
-
-
-
-
-
-	//something else
-    IEnumerator MoveTo(Vector3 destination, GameObject obj)
+    IEnumerator MoveTo(Vector3 start, Vector3 stop, String text, bool doNext)
     {
+
+        GameObject anim = Instantiate(animationPrefab) as GameObject;
+        anim.transform.SetParent(bgPanel.transform, false);
+        anim.transform.GetChild(0).GetComponent<Text>().text = text;
+        anim.transform.position = start;
+
         float timeEllapsed = 0;
-        Vector3 origin = obj.transform.position;
 
         while (timeEllapsed < animTime)
         {
-            obj.transform.position = Vector3.Lerp(origin, destination, timeEllapsed / animTime);
+            anim.transform.position = Vector3.Lerp(start, stop, timeEllapsed / animTime);
             timeEllapsed += lerpTime;
             yield return new WaitForSeconds(lerpTime);
         }
-        Destroy(obj);
+        Destroy(anim);
+        if (doNext)
+            doNextStep();
     }
-
 
 
 
