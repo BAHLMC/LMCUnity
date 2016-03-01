@@ -42,10 +42,10 @@ public class LMCScript : MonoBehaviour {
     private GameObject[] pRegisters;
 
     //Color presets
-    private Color yellow = new Color32(245, 255, 69, 255);
-    private Color green = new Color32(0, 255, 0, 255);
-    private Color blue = new Color32(69, 247, 255, 255);
-    private Color paleYellow = new Color32(254, 255, 197, 255);
+    private Color usedRegisterBlue = new Color32(0, 207, 255, 255);
+    private Color currentOpRegCodes = new Color32(132, 249, 132, 255);
+    private Color inputBoxHighlight = new Color32(255, 252, 137, 255);
+    private Color defaultRegister = new Color32(223, 253, 255, 255);
     private int prevCode = 0;
     private int prevMem = 0;
 
@@ -187,9 +187,9 @@ public class LMCScript : MonoBehaviour {
         }
 
         //update register colors
-        pRegisters[prevCode].GetComponent<Image>().color = yellow;
-        pRegisters[prevMem].GetComponent<Image>().color = yellow;
-        pRegisters[currentCode].GetComponent<Image>().color = green;
+        pRegisters[prevCode].GetComponent<Image>().color = usedRegisterBlue;
+        pRegisters[prevMem].GetComponent<Image>().color = usedRegisterBlue;
+        pRegisters[currentCode].GetComponent<Image>().color = currentOpRegCodes;
         prevCode = currentCode;
 
         int code = Int32.Parse(opCodes[currentCode]);
@@ -201,7 +201,7 @@ public class LMCScript : MonoBehaviour {
         memoryDataRegister.text = "";
         if (code < 900 && code != 0)
         {
-            pRegisters[code % 100].GetComponent<Image>().color = blue;
+            pRegisters[code % 100].GetComponent<Image>().color = currentOpRegCodes;
             memoryAddressRegister.text = code % 100 + "";
             memoryDataRegister.text = registers[code % 100] + "";
         }
@@ -350,7 +350,7 @@ public class LMCScript : MonoBehaviour {
         foreach (GameObject reg in pRegisters) {
             if (reg != null)
             {
-                reg.GetComponent<Image>().color = paleYellow;
+                reg.GetComponent<Image>().color = defaultRegister;
                 reg.transform.GetChild(1).GetComponent<Text>().text = "000";
             }
         }
@@ -407,7 +407,7 @@ public class LMCScript : MonoBehaviour {
         String input = inputTextField.text;
         if (input.Length == 0)
         {
-            inputTextField.GetComponent<Image>().color = Color.cyan;
+            inputTextField.GetComponent<Image>().color = inputBoxHighlight;
             waitingOnInput = true;
             StartCoroutine(WaitForKeyDown(KeyCode.Return));
         }
@@ -607,6 +607,7 @@ public class LMCScript : MonoBehaviour {
         GameObject anim = Instantiate(animationPrefab) as GameObject;
         anim.transform.SetParent(bgPanel.transform, false);
         anim.transform.GetChild(0).GetComponent<Text>().text = text;
+        anim.transform.GetComponent<Image>().color = currentOpRegCodes;
         anim.transform.position = start;
 
         float timeEllapsed = 0;

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 using System;
 using System.IO;
 using System.Text;
@@ -18,17 +18,19 @@ public class OptButtons : MonoBehaviour {
 	}
     public void saveFile()
     {
+        /*
         string scriptText = PlayerPrefs.GetString("currentScriptText", "404");
         string path = PlayerPrefs.GetString("filename", "404");
-        string temp = EditorUtility.SaveFilePanel(
-            "1", path.Substring(path.LastIndexOf("/"),path.Length - path.LastIndexOf("/")), "untitled","txt");
+        string temp = EditorUtility.SaveFilePanel("1", path.Substring(path.LastIndexOf("/"),path.Length - path.LastIndexOf("/")), "untitled","txt");
         if(path.Length > 0)
         {
             File.WriteAllText(temp,scriptText);
         }
+        */
     }
 
 	public void SelectFile () {
+        /*
         string path = EditorUtility.OpenFilePanel(
             "Test1",
             "Test2",
@@ -41,6 +43,7 @@ public class OptButtons : MonoBehaviour {
             PlayerPrefs.SetString("filename", path);
             Application.LoadLevel(1);
         }
+        */
 	}
 
     public void GoToMainMenu()
