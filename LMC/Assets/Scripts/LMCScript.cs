@@ -51,7 +51,7 @@ public class LMCScript : MonoBehaviour {
 
     //Animation Stuff
     private float animTime;
-    private float lerpTime = 0.05f;
+    private float lerpTime = 0.03f;
     private bool isAnimating = false;
 
     //Interactive variables set in Unity
@@ -66,7 +66,7 @@ public class LMCScript : MonoBehaviour {
     public InputField instructionRegister;
     public InputField memoryAddressRegister;
     public InputField memoryDataRegister;
-    public float autoRunDelay = 2.0f;
+    public float autoRunDelay = 2.5f;
     public GameObject animationPrefab;
     public GameObject bgPanel;
 
@@ -610,6 +610,11 @@ public class LMCScript : MonoBehaviour {
         anim.transform.GetComponent<Image>().color = currentOpRegCodes;
         anim.transform.position = start;
 
+        float newWidth = bgPanel.GetComponent<RectTransform>().rect.width / 10.0f;
+        float newHeight = bgPanel.GetComponent<RectTransform>().rect.height / 10.0f;
+
+        anim.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, newHeight);
+
         float timeEllapsed = 0;
 
         while (timeEllapsed < animTime)
@@ -619,15 +624,9 @@ public class LMCScript : MonoBehaviour {
             yield return new WaitForSeconds(lerpTime);
         }
         Destroy(anim);
-        if (doNext)
+        if (doNext && timeEllapsed > animTime)
             doNextStep();
     }
-
-
-
-
-	
-
 
 }
 
