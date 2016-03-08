@@ -560,25 +560,35 @@ public class LMCScript : MonoBehaviour {
     
 	void ShowHelpBox(int windowID)
 	{
-		
-		// You may put a label to show a message to the player
 		float width = Screen.width / 2;
 		float height = Screen.height *.75f;
+		Texture2D texture = new Texture2D(1, 1);
+		//private Color usedRegisterBlue = new Color32(0, 207, 255, 255);
+		//private Color currentOpRegCodes = new Color32(132, 249, 132, 255);
+		//private Color inputBoxHighlight = new Color32(255, 252, 137, 255);
+		//private Color defaultRegister = new Color32(223, 253, 255, 255);
 
-		GUI.Label(new Rect(width * .05f, height * .05f, width * .9f, height * .74f), "Start by typing a program into the text box in the script panel. When your program is ready, press compile in the bottom left of the screen. Then press play. " +
-            "\nInput can be found just left of the center of the screen with the final output displaying right below it. \n\n" +
-            "\nThe Program counter keeps track of what instruction we are on. " +
-            "\nThe Accumulator shows the current accumulated value that is stored in temporary memory " +
-            "\nThe Mem Address Register is the addess of the register that we are writing to or reading from." +
-            "\nThe Insturction register is the full instruction that is found in the memory address of the program counter. As a reminder of what the instruction does, you can find it on the left next to the line of code it corresponds with." +
-            "\nThe Mem Data Register field is the value that we are reading in from the address in the Mem Address Register textbox.");
+		texture.SetPixel(0,0,defaultRegister);
+		texture.Apply();
+		GUI.DrawTexture (new Rect (200, 50, 20, 20), texture);
+		GUI.Label (new Rect (230, 50, 500, 20), "Unused registers");
 
-		float gwidth = width;
-		float gheight = height;
+		texture.SetPixel(0,0,usedRegisterBlue);
+		texture.Apply();
+		GUI.DrawTexture (new Rect (200,80,20,20), texture);
+		GUI.Label (new Rect (230, 80, 500, 20), "Used registers");
 
-		GUI.DrawTexture(new Rect(gwidth-10, gheight-10, gwidth-10, gheight-10), helpImage, ScaleMode.ScaleToFit, true, 10.0F);
+		texture.SetPixel(0,0,currentOpRegCodes);
+		texture.Apply();
+		GUI.DrawTexture (new Rect (200, 110, 20, 20), texture);
+		GUI.Label (new Rect (230, 110, 500, 20), "Current operation register");
 
-		// You may put a button to close the pop up too
+		texture.SetPixel(0,0,inputBoxHighlight);
+		texture.Apply();
+		GUI.DrawTexture (new Rect (200, 140, 20, 20), texture);
+		GUI.Label (new Rect (230, 140, 500, 20), "Enter an input where this color appears");
+
+
 		if (GUI.Button(new Rect(width / 2 - 35, height * 3 /4 -50, 70, 30), "Tutorial"))
 		{
 			showHelpBox = false;
