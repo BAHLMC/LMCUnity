@@ -1,6 +1,2 @@
-<<<<<<< 8403a74e5654543b46a5cf6c2426dfa8caa6b046
-m_EditorVersion: 5.2.1f1
-=======
-m_EditorVersion: 5.3.2f1
->>>>>>> Animation size issues
+m_EditorVersion: 5.3.1f1
 m_StandardAssetsVersion: 0

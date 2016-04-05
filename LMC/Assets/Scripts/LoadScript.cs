@@ -3,8 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
+class File
+{
+    public string filename;
+    public string contents;
+    File(string _filename, string _contents){
+        filename = _filename;
+        contents = _contents;
+    }
+}
 public class LoadScript : MonoBehaviour
 {
+    string[] filenamesArr;
 
     /*
     
@@ -27,17 +37,74 @@ public class LoadScript : MonoBehaviour
         */
 
     public Text saveScriptInput;
-    public Text filenameText;
+    public InputField filenameText;
+    public Text filenames;
     void Start(){
-		string scriptText = PlayerPrefs.GetString ("currentScriptText","NONE");
-        string filename = PlayerPrefs.GetString("filename", "404");
-		if (scriptText != "NONE") {
-            filenameText.text = filename;
-			saveScriptInput.text = scriptText;
-		} else {
-            saveScriptInput.text = "";
-		}
+        filenamesArr = loadFilenames();
+        displayFilenames(filenamesArr);
+        loadTexts();
+
 	}
+    void displayFilenames(string[] names)
+    {
+        string str = "";
+        foreach(string s in names){
+            str += s + "\n";
+            Debug.Log("displaying " + s);
+        }
+        filenames.text = str;
+    }
+    void loadTexts()
+    {
+        string scriptText = PlayerPrefs.GetString("currentScriptText", "NONE");
+        string filename = PlayerPrefs.GetString("filename", "404");
+        if (scriptText != "NONE")
+        {
+            saveScriptInput.text = scriptText;
+        }
+        else
+        {
+            saveScriptInput.text = "";
+        }
+        if (filename != "404")
+        {
+            filenameText.text = filename;
+        }
+        else
+        {
+            filenameText.text = "New File.txt";
+        }
+    }
+
+    public void saveFile()
+    {
+        string saveto = "file" + ((filenamesArr.Length <= 9) ? "0" + filenamesArr.Length.ToString() : filenamesArr.Length.ToString());
+        if (PlayerPrefs.GetString(saveto, "") == "")
+        {
+            PlayerPrefs.SetString(saveto, filenameText.text);
+        }
+        PlayerPrefs.SetString("contents" + filenameText.text, saveScriptInput.text);
+        Debug.Log("saving " + filenameText.text + " to " + saveto);
+        PlayerPrefs.SetString("contents" + filenameText.text, saveScriptInput.text);
+        filenamesArr = loadFilenames();
+        displayFilenames(filenamesArr);
+        loadTexts();
+    }
+    public void clearSaves()
+    {
+        for(int i = 0; i < filenamesArr.Length; i++)
+        {
+            string command = "file" + ((i <= 9) ? "0" + i.ToString() : i.ToString());
+            PlayerPrefs.SetString(command, "");
+        }
+    }
+    public void modifyCurrentFilename()
+    {
+        if (filenameText.text != "")
+        {
+            PlayerPrefs.SetString("filename", filenameText.text);
+        }
+    }
     public void GoToMainMenu ()
 	{
 		Application.LoadLevel (3);
@@ -56,6 +123,22 @@ public class LoadScript : MonoBehaviour
 			return reg.ToString ();
 		}
 	}
+
+    string[] loadFilenames()
+    {
+        List<string> strs = new List<string>();
+        string str = PlayerPrefs.GetString("file00", "");
+        int counter = 1;
+        while(str != "")
+        {
+            strs.Add(str);
+            string command = "file" + (counter <= 9 ? "0" + counter.ToString() : counter.ToString());
+            str = PlayerPrefs.GetString(command, "");
+            Debug.Log("loader on " + command + " found " + str);
+            counter++;
+        }
+        return strs.ToArray();
+    }
 
 	static string[] StartScan (string[] al)
 	{
