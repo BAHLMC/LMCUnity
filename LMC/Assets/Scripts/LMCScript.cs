@@ -75,6 +75,8 @@ public class LMCScript : MonoBehaviour {
         registers = new int[100];
         pRegisters = new GameObject[100];
         clearAll();
+        if (PlayerPrefs.HasKey("Animation Speed"))
+            autoRunDelay = PlayerPrefs.GetFloat("Animation Speed");
         animTime = autoRunDelay/2;
         //Test
         parsedTextBox.text = "The parsed text from the script will go here";
