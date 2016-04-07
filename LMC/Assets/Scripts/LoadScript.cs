@@ -15,6 +15,7 @@ class File
 public class LoadScript : MonoBehaviour
 {
     string[] filenamesArr;
+    int currFile = 0;
 
     /*
     
@@ -39,10 +40,12 @@ public class LoadScript : MonoBehaviour
     public Text saveScriptInput;
     public InputField filenameText;
     public Text filenames;
+    public Text selected;
     void Start(){
         filenamesArr = loadFilenames();
         displayFilenames(filenamesArr);
         loadTexts();
+        processLoad();
 
 	}
     void displayFilenames(string[] names)
@@ -72,7 +75,7 @@ public class LoadScript : MonoBehaviour
         }
         else
         {
-            filenameText.text = "New File.txt";
+            filenameText.text = "";
         }
     }
 
@@ -110,10 +113,60 @@ public class LoadScript : MonoBehaviour
 		Application.LoadLevel (3);
 	}
 
-	public static string[] callStartScanTest (string[] toTest)
+    public void upButton()
+    {
+        currFile--;
+        if(currFile < 0)
+        {
+            currFile = filenamesArr.Length - 1;
+        }
+        processLoad();
+    }
+    public void loadCurrent()
+    {
+        string savedText = PlayerPrefs.GetString("contents" + filenamesArr[currFile], "404");
+        if(savedText == "404")
+        {
+            Debug.Log("could not find file");
+        }
+        else
+        {
+            PlayerPrefs.SetString("currentScriptText", savedText);
+            PlayerPrefs.SetString("filename", filenamesArr[currFile]);
+            loadTexts();
+        }
+    }
+    public void downButton()
+    {
+        currFile++;
+        if(currFile >= filenamesArr.Length)
+        {
+            currFile = 0;
+        }
+        processLoad();
+    }
+
+    public static string[] callStartScanTest (string[] toTest)
 	{
         return StartScan(toTest);
 	}
+    void processLoad()
+    {
+        string selStr = "";
+        for(int i = 0; i < filenamesArr.Length; i++)
+        {
+            if(i == currFile)
+            {
+                selStr += filenamesArr[i];
+                Debug.Log("setting selected to " + filenamesArr[i] + " i = " + i);
+            }
+            else
+            {
+                selStr += "\n";
+            }
+        }
+        selected.text = selStr;
+    }
 
 	static string convertRegToString (int reg)
 	{
