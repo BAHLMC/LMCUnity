@@ -82,7 +82,7 @@ public class LMCScript : MonoBehaviour {
         parsedTextBox.text = "The parsed text from the script will go here";
         accumulator.text = "0";
 
-        string tempString = "INP\nSTA FIRST\nINP\nSTA SECOND\nINP\nADD FIRST\nADD SECOND\nSUB FIRST\nOUT\nHLT\nFIRST DAT\nSECOND DAT";
+        string tempString = "";
         string scriptText = PlayerPrefs.GetString("currentScriptText", "404");
         if(scriptText == "404")
         {

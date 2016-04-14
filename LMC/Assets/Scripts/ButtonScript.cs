@@ -17,6 +17,7 @@ public class ButtonScript : MonoBehaviour {
 		Application.LoadLevel(0);
 	}
 	public void GoToGame () {
+        PlayerPrefs.SetString("currentScriptText", "404");
 		Application.LoadLevel (1);
 	}
 	public void GoToLoad () {

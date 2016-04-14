@@ -93,6 +93,10 @@ public class LoadScript : MonoBehaviour
         displayFilenames(filenamesArr);
         loadTexts();
     }
+    public void loadLMC()
+    {
+        Application.LoadLevel(1);
+    }
     public void clearSaves()
     {
         for(int i = 0; i < filenamesArr.Length; i++)
