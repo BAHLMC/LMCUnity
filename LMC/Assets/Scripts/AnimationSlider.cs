@@ -8,7 +8,8 @@ public class AnimationSlider : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		if (PlayerPrefs.HasKey ("Animation Speed"))
+			AnimSlider.GetComponent<Slider> ().value = PlayerPrefs.GetFloat ("Animation Speed");
 	}
 	
 	// Update is called once per frame
