@@ -182,59 +182,95 @@ public class LMCScript : MonoBehaviour {
 
     void doNextStep()
     {
+        Debug.Log("Doing Next Step");
         if (hasErrors() || currentCode > opCodes.Length || currentCode < 0)
         {
+            Debug.Log("leaving, hasErrors = " + hasErrors() + "currentCode = " + currentCode);
             isRunning = false;
             return;
         }
-
-        //update register colors
-        pRegisters[prevCode].GetComponent<Image>().color = usedRegisterBlue;
-        pRegisters[prevMem].GetComponent<Image>().color = usedRegisterBlue;
-        pRegisters[currentCode].GetComponent<Image>().color = currentOpRegCodes;
-        prevCode = currentCode;
-
-        int code = Int32.Parse(opCodes[currentCode]);
-
-        //more register colors and CPU text
-        instructionRegister.text = code + "";
-        programCounter.text = currentCode + "";
-        memoryAddressRegister.text = "";
-        memoryDataRegister.text = "";
-        if (code < 900 && code != 0)
+        int code;
+        try
         {
-            pRegisters[code % 100].GetComponent<Image>().color = currentOpRegCodes;
-            memoryAddressRegister.text = code % 100 + "";
-            memoryDataRegister.text = registers[code % 100] + "";
+            code = Int32.Parse(opCodes[currentCode]);
         }
-        prevMem = code % 100;
+        catch (ArgumentNullException)
+        {
+            code = -1;
+        }
+        if (code != -1)
+        {
+            //update register colors
+            Debug.Log("update register colors");
+            pRegisters[prevCode].GetComponent<Image>().color = usedRegisterBlue;
+            pRegisters[prevMem].GetComponent<Image>().color = usedRegisterBlue;
+            pRegisters[currentCode].GetComponent<Image>().color = currentOpRegCodes;
+            prevCode = currentCode;
+
+            // int code = Int32.Parse(opCodes[currentCode]);
+
+            //more register colors and CPU text
+            Debug.Log("more register colors and CPU text");
+            instructionRegister.text = code + "";
+            programCounter.text = currentCode + "";
+            memoryAddressRegister.text = "";
+            memoryDataRegister.text = "";
+            if (code < 900 && code != 0)
+            {
+                pRegisters[code % 100].GetComponent<Image>().color = currentOpRegCodes;
+                memoryAddressRegister.text = code % 100 + "";
+                memoryDataRegister.text = registers[code % 100] + "";
+            }
+            prevMem = code % 100;
 
 
-        if (code == 902) {
-			sendToOutput ();
-		} else if (code == 901) {
-			getInput ();
-		} else if (code >= 600) {
-			checkForBranch (code);
-		} else if (code >= 500) {
-			loadOp (code);
-		} else if (code >= 300) {
-			storeOp(code);
-		} else if (code >= 200) {
-			subOp (code);
-		} else if (code >= 100) {
-			addOp (code);
-		} else if (code == 000) {
-            //halt
-            isRunning = false;
-            return;
-		}
+            Debug.Log("going to precoss code: " + code);
 
+            if (code == 902)
+            {
+                sendToOutput();
+            }
+            else if (code == 901)
+            {
+                getInput();
+            }
+            else if (code >= 600)
+            {
+                checkForBranch(code);
+            }
+            else if (code >= 500)
+            {
+                loadOp(code);
+            }
+            else if (code >= 300)
+            {
+                storeOp(code);
+            }
+            else if (code >= 200)
+            {
+                subOp(code);
+            }
+            else if (code >= 100)
+            {
+                addOp(code);
+            }
+            else if (code == 000)
+            {
+                //halt
+                Debug.Log("HLT");
+                isRunning = false;
+                return;
+            }
+        }
         currentCode++;
         if (isRunning && !waitingOnInput)
         {
             //Should pause between steps to let animations happen
             StartCoroutine(Delay());
+        }
+        else
+        {
+            Debug.Log("isRunning = " + isRunning + ", waitingOnInput = " + waitingOnInput);
         }
     }
 
@@ -476,7 +512,8 @@ public class LMCScript : MonoBehaviour {
             return;
         }
 
-        currentCode = registers[registerCode+1];
+        currentCode = registerCode;
+        Debug.Log("Going to reg " + (registerCode + 2) + " current = " + currentCode);
     }
 
     private void storeOp( int code) {

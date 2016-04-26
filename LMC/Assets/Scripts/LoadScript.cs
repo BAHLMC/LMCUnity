@@ -99,11 +99,18 @@ public class LoadScript : MonoBehaviour
     }
     public void clearSaves()
     {
-        for(int i = 0; i < filenamesArr.Length; i++)
+        for(int i = currFile + 1; i < filenamesArr.Length; i++)
         {
-            string command = "file" + ((i <= 9) ? "0" + i.ToString() : i.ToString());
-            PlayerPrefs.SetString(command, "");
+            string from = "file" + ((i <= 9) ? "0" + i.ToString() : i.ToString());
+            string to = "file" + ((i-1 <= 9) ? "0" + (i-1).ToString() : (i-1).ToString());
+            PlayerPrefs.SetString(to, PlayerPrefs.GetString(from, ""));
+            PlayerPrefs.SetString(from, "");
         }
+        int temp = filenamesArr.Length - 1;
+        string command = "file" + ((temp <= 9) ? "0" + temp.ToString() : temp.ToString());
+        PlayerPrefs.SetString(command, "");
+
+        refresh();
     }
     public void modifyCurrentFilename()
     {
@@ -171,7 +178,13 @@ public class LoadScript : MonoBehaviour
         }
         selected.text = selStr;
     }
-
+    void refresh()
+    {
+        filenamesArr = loadFilenames();
+        displayFilenames(filenamesArr);
+        loadTexts();
+        processLoad();
+    }
 	static string convertRegToString (int reg)
 	{
 		try{
